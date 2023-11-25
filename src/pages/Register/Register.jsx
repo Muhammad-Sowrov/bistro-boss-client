@@ -1,14 +1,43 @@
+import { useContext } from "react";
 import { useForm } from "react-hook-form";
-import { NavLink } from "react-router-dom";
+import { NavLink, Navigate, useLocation, useNavigate } from "react-router-dom";
+import { AuthContext } from "../../provider/AuthProvider";
+import Swal from "sweetalert2";
 
 const Register = () => {
+  // const location = useLocation();
+  const navigate = useNavigate()
+  const { createUser } = useContext(AuthContext);
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors }
   } = useForm();
   const onSubmit = (data) => {
     console.log(data);
+    createUser(data.email, data.password)
+    .then(result => {
+        const loggedUser = result.user;
+        console.log(loggedUser);
+        Swal.fire({
+          title: "Account created successful",
+          showClass: {
+            popup: `
+              animate__animated
+              animate__fadeInUp
+              animate__faster
+            `
+          },
+          hideClass: {
+            popup: `
+              animate__animated
+              animate__fadeOutDown
+              animate__faster
+            `
+          }
+        });
+        navigate('/login')
+    })
   };
   return (
     <div>
@@ -23,40 +52,75 @@ const Register = () => {
                 Name
               </label>
               <input
-              {...register("name", { required: true })}
+                {...register("name", { required: true })}
                 type="text"
                 name="name"
                 className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:border-green-500"
                 placeholder="Email"
               />
-               {errors.name && <span>This field is required</span>}
+              {errors.name && (
+                <span className="text-red-700">This field is required</span>
+              )}
+            </div>
+            <div className="mb-4">
+              <label className="block text-gray-600 text-sm font-semibold">
+                Name
+              </label>
+              <input
+                {...register("photoUrl", { required: true })}
+                type="text"
+                name="photoUrl"
+                className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:border-green-500"
+                placeholder="Photo Url"
+              />
+              {errors.photoUrl && (
+                <span className="text-red-700">This field is required</span>
+              )}
             </div>
             <div className="mb-4">
               <label className="block text-gray-600 text-sm font-semibold">
                 Email
               </label>
               <input
-              {...register("email", { required: true })}
+                {...register("email", { required: true })}
                 type="email"
                 name="email"
                 className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:border-green-500"
                 placeholder="Email"
               />
-              {errors.email && <span>This field is required</span>}
+              {errors.email && (
+                <span className="text-red-700">This field is required</span>
+              )}
             </div>
             <div className="mb-6">
               <label className="block text-gray-600 text-sm font-semibold">
                 Password
               </label>
               <input
-              {...register("password", {required: true, minLength: 6, pattern: /^(?=.*[A-Z])(?=.*[^A-Za-z0-9]).{6,}$/i })}
-              
+                {...register("password", {
+                  required: true,
+                  minLength: 6,
+                  pattern: /^(?=.*[A-Z])(?=.*[^A-Za-z0-9]).{6,}$/i,
+                })}
                 type="password"
                 name="password"
                 className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:border-green-500"
                 placeholder="Password"
               />
-               {errors.password && <span className="text-red-700">Password is invalid. It should be at least 6 characters long, contain at least one uppercase letter, and have at least one special character</span>}
+              {errors.password?.type === "minLength" && (
+                <span className="text-red-700">
+                  Password must be at-lest 6 character
+                </span>
+              )}
+              {errors.password?.type === "required" && (
+                <span className="text-red-700">This field is required</span>
+              )}
+              {errors.password?.type === "pattern" && (
+                <span className="text-red-700">
+                  Password must have a uppercase, lowercase, number and special
+                  character
+                </span>
+              )}
             </div>
 
             <button
