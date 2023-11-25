@@ -1,46 +1,49 @@
 import { useContext } from "react";
 import { useForm } from "react-hook-form";
-import { NavLink, Navigate, useLocation, useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../provider/AuthProvider";
 import Swal from "sweetalert2";
+import { Helmet } from "react-helmet-async";
 
 const Register = () => {
   // const location = useLocation();
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const { createUser } = useContext(AuthContext);
   const {
     register,
     handleSubmit,
-    formState: { errors }
+    formState: { errors },
   } = useForm();
   const onSubmit = (data) => {
     console.log(data);
-    createUser(data.email, data.password)
-    .then(result => {
-        const loggedUser = result.user;
-        console.log(loggedUser);
-        Swal.fire({
-          title: "Account created successful",
-          showClass: {
-            popup: `
+    createUser(data.email, data.password).then((result) => {
+      const loggedUser = result.user;
+      console.log(loggedUser);
+      Swal.fire({
+        title: "Account created successful",
+        showClass: {
+          popup: `
               animate__animated
               animate__fadeInUp
               animate__faster
-            `
-          },
-          hideClass: {
-            popup: `
+            `,
+        },
+        hideClass: {
+          popup: `
               animate__animated
               animate__fadeOutDown
               animate__faster
-            `
-          }
-        });
-        navigate('/login')
-    })
+            `,
+        },
+      });
+      navigate("/login");
+    });
   };
   return (
     <div>
+      <Helmet>
+        <title>Bistro Boss | Login </title>
+      </Helmet>
       <div className="min-h-screen flex items-center justify-center bg-gray-200">
         <div className="bg-white p-8 rounded-lg shadow-lg w-full sm:w-1/2 md:w-1/3 lg:w-1/4">
           <h2 className="text-2xl font-semibold text-center text-gray-800 mb-6">

@@ -1,4 +1,3 @@
-
 import { createBrowserRouter } from "react-router-dom";
 import Home from "../components/Home/Home";
 import Layout from "../Layout/Layout";
@@ -36,7 +35,11 @@ const Route = createBrowserRouter([
       },
       {
         path: "/faq",
-        element: <PrivateRoute><Faq></Faq></PrivateRoute>,
+        element: (
+          <PrivateRoute>
+            <Faq></Faq>
+          </PrivateRoute>
+        ),
       },
     ],
   },
