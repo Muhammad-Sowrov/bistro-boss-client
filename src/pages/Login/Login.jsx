@@ -16,6 +16,7 @@ const Login = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const from = location.state?.from?.pathname || "/";
+  console.log(location.state);
 
   useEffect(() => {
     loadCaptchaEnginge(6);
@@ -114,7 +115,7 @@ const Login = () => {
               Login
             </button> */}
             <input
-              disabled={disabled}
+              disabled={false}
               type="submit"
               className="w-full btn btn-primary text-black font-semibold p-2 rounded focus:outline-none focus:bg-green-600"
               value="Login"
