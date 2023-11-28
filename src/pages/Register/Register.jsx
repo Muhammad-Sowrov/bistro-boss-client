@@ -4,14 +4,17 @@ import { NavLink, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../provider/AuthProvider";
 import Swal from "sweetalert2";
 import { Helmet } from "react-helmet-async";
+import useAxiosPublic from "../../hooks/useAxiosPublic";
 
 const Register = () => {
   // const location = useLocation();
+  const axiosPublic = useAxiosPublic();
   const navigate = useNavigate();
-  const { createUser } = useContext(AuthContext);
+  const { createUser, updateUserProfile } = useContext(AuthContext);
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm();
   const onSubmit = (data) => {
@@ -19,24 +22,39 @@ const Register = () => {
     createUser(data.email, data.password).then((result) => {
       const loggedUser = result.user;
       console.log(loggedUser);
-      Swal.fire({
-        title: "Account created successful",
-        showClass: {
-          popup: `
-              animate__animated
-              animate__fadeInUp
-              animate__faster
-            `,
-        },
-        hideClass: {
-          popup: `
-              animate__animated
-              animate__fadeOutDown
-              animate__faster
-            `,
-        },
+      updateUserProfile(data.name, data.photoUrl).then(() => {
+        const userInfo = {
+          name: data.name,
+          email: data.email,
+        };
+        axiosPublic.post('/users', userInfo)
+        .then(res => {
+          console.log(res);
+          if(res.data.insertedId){
+            reset()
+            Swal.fire({
+              title: "Account created successful",
+              showClass: {
+                popup: `
+                    animate__animated
+                    animate__fadeInUp
+                    animate__faster
+                  `,
+              },
+              hideClass: {
+                popup: `
+                    animate__animated
+                    animate__fadeOutDown
+                    animate__faster
+                  `,
+              },
+            });
+            navigate("/login");
+          }
+        })
       });
-      navigate("/login");
+      
+      
     });
   };
   return (
