@@ -8,6 +8,7 @@ import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../provider/AuthProvider";
 import Swal from "sweetalert2";
 import { Helmet } from "react-helmet-async";
+import SocialLogin from "../../components/SocialLogin/SocialLogin";
 
 const Login = () => {
   const { signIn } = useContext(AuthContext);
@@ -52,6 +53,9 @@ const Login = () => {
       navigate(from, { replace: true });
     });
   };
+
+
+  
   const handleCaptcha = (e) => {
     const user_captcha_value = e.target.value;
     console.log(user_captcha_value);
@@ -133,9 +137,7 @@ const Login = () => {
             </p>
           </div>
           <div className="mt-6 text-center">
-            <button className="bg-white hover:bg-gray-200 text-gray-800 md:rounded-lg font-semibold p-2 rounded border border-gray-300 focus:outline-none">
-              Log in with Google
-            </button>
+            <SocialLogin></SocialLogin>
           </div>
         </div>
       </div>

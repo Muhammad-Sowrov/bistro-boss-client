@@ -5,6 +5,7 @@ import { AuthContext } from "../../provider/AuthProvider";
 import Swal from "sweetalert2";
 import { Helmet } from "react-helmet-async";
 import useAxiosPublic from "../../hooks/useAxiosPublic";
+import SocialLogin from "../../components/SocialLogin/SocialLogin";
 
 const Register = () => {
   // const location = useLocation();
@@ -26,6 +27,7 @@ const Register = () => {
         const userInfo = {
           name: data.name,
           email: data.email,
+          photo: data.photoUrl,
         };
         axiosPublic.post('/users', userInfo)
         .then(res => {
@@ -159,14 +161,9 @@ const Register = () => {
               </NavLink>
             </p>
           </div>
-          {/* <div className="mt-6 text-center">
-            <button
-             
-              className="bg-white hover:bg-gray-200 text-gray-800 font-semibold p-2 rounded border border-gray-300 focus:outline-none"
-            >
-              Sign Up with Google
-            </button>
-          </div> */}
+          <div className="mt-6 text-center">
+            <SocialLogin></SocialLogin>
+          </div>
         </div>
       </div>
     </div>
